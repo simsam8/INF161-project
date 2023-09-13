@@ -60,11 +60,18 @@ class DataCleaning:
         trafikk_df = trafikk_df.rename(columns={"Trafikkmengde": "Total Trafikkmengde"})
         trafikk_df = trafikk_df[trafikk_df["Dato"].notna()]
 
+        # Lager en datetime kolonne
         trafikk_df["Datetime"] = pd.to_datetime(
             trafikk_df["Dato"].astype(str)
             + " "
             + trafikk_df["Fra tidspunkt"].astype(str)
         )
+
+        # Dropper duplikater der klokken blir stilt tilbake
+        trafikk_df = trafikk_df.drop_duplicates(["Datetime"], keep="first")
+
+        # Dropper dato og tidspunkt
+        # Setter Datetime kolonne som index til dataset
         trafikk_df = trafikk_df.drop(columns=["Dato", "Fra tidspunkt"])
         trafikk_df.set_index("Datetime", inplace=True)
 
@@ -104,6 +111,7 @@ class DataCleaning:
 
         # Setter manglende verdier til Nan
         df = df.replace(9999.99, np.nan)
+        df["Relativ luftfuktighet"] = df["Relativ luftfuktighet"].replace("", np.nan)
 
         # Resampler værdata til 1t intervaller
         df_resampled = df.resample("H").mean()
