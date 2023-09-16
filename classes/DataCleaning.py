@@ -7,7 +7,13 @@ class DataCleaning:
     def __init__(self) -> None:
         pass
 
-    def clean_trafikkdata(self, filepath: str) -> pd.DataFrame:
+    def get_dataset(self, data_folder: str) -> pd.DataFrame:
+        traffic_data = os.path.join(data_folder, "trafikkdata.csv")
+        traffic_df = self.clean_traffic_data(traffic_data)
+        weather_df = self.clean_weather_data(data_folder)
+        return self.create_dataset(traffic_df, weather_df)
+
+    def clean_traffic_data(self, filepath: str) -> pd.DataFrame:
         """
         Cleans traffic data.
         Removes unnecessary columns and sets datetime index.
@@ -60,6 +66,11 @@ class DataCleaning:
         trafikk_df = trafikk_df.rename(columns={"Trafikkmengde": "Total Trafikkmengde"})
         trafikk_df = trafikk_df[trafikk_df["Dato"].notna()]
 
+        # Setter datatype
+        trafikk_df["Total Trafikkmengde"] = trafikk_df["Total Trafikkmengde"].replace(
+            "-", np.nan
+        )
+
         # Lager en datetime kolonne
         trafikk_df["Datetime"] = pd.to_datetime(
             trafikk_df["Dato"].astype(str)
@@ -111,7 +122,14 @@ class DataCleaning:
 
         # Setter manglende verdier til Nan
         df = df.replace(9999.99, np.nan)
-        df["Relativ luftfuktighet"] = df["Relativ luftfuktighet"].replace("", np.nan)
+
+        # Setter negative verdier til 0 i globalstråling
+        df["Globalstraling"] = df["Globalstraling"].clip(lower=0)
+
+        # Dropper kolonnen relativluftfuktighet
+        # mesteparten av radene har manglende verdier
+        # df["Relativ luftfuktighet"] = df["Relativ luftfuktighet"].replace("", np.nan)
+        df = df.drop(columns=["Relativ luftfuktighet"])
 
         # Resampler værdata til 1t intervaller
         df_resampled = df.resample("H").mean()
