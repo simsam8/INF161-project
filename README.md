@@ -29,3 +29,8 @@ Filer for rapport og resultater:
 - [DataExploration.ipynb](DataExploration.ipynb)
 - [ModelResults.ipynb](ModelResults.ipynb)
 - [rapport.md](rapport.md)
+
+
+Diverse filer:
+
+- [test.py](test.py) brukt for testing
