@@ -4,6 +4,9 @@ import os
 
 
 class DataCleaning:
+    """
+    Class for preprocessing data
+    """
     def __init__(self) -> None:
         pass
 
@@ -11,7 +14,9 @@ class DataCleaning:
         traffic_data = os.path.join(data_folder, "trafikkdata.csv")
         traffic_df = self.clean_traffic_data(traffic_data)
         weather_df = self.clean_weather_data(data_folder)
-        return self.create_dataset(traffic_df, weather_df)
+        combined = self.combine_data(traffic_df, weather_df)
+        feature_engineered = self.create_features(combined)
+        return feature_engineered
 
     def clean_traffic_data(self, filepath: str) -> pd.DataFrame:
         """
@@ -135,7 +140,19 @@ class DataCleaning:
         df_resampled = df.resample("H").mean()
         return df_resampled
 
-    def create_dataset(
+    def create_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Creates new features from existing features
+
+        return: DataFrame
+        """
+        df["hour"] = df.index.hour
+        df["day"] = df.index.dayofweek
+        df["month"] = df.index.month
+        df["year"] = df.index.year
+        return df
+
+    def combine_data(
         self, trafikk_df: pd.DataFrame, weather_df: pd.DataFrame
     ) -> pd.DataFrame:
         """
