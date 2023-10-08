@@ -10,10 +10,11 @@
 
 ## Filer
 
-I mappen classes finner du alle python klasses for data prossesering og modellering:
+I mappen classes finner du alle python klasser for data prossesering, analyse og modellering:
 
 - [DataCleaning.py](classes/DataCleaning.py)
-- ...
+- [DataExploration.py](classes/DataExploration.py)
+- [ModelEvaluation.py](classes/ModelEvaluation.py)
 
 
 I mappen notebooks finner du alle jupyter notebooks som ble brukt for testing av kode
@@ -22,3 +23,9 @@ I mappen notebooks finner du alle jupyter notebooks som ble brukt for testing av
 - [Analyse.ipynb](notebooks/Analyse.ipynb)
 - ...
 
+
+Filer for rapport og resultater:
+
+- [DataExploration.ipynb](DataExploration.ipynb)
+- [ModelResults.ipynb](ModelResults.ipynb)
+- [rapport.md](rapport.md)
