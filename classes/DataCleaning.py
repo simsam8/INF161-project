@@ -1,22 +1,35 @@
 import pandas as pd
 import numpy as np
 import os
+from .FeatureEngineering import FeatureEngineering
 
 
 class DataCleaning:
     """
     Class for preprocessing data
     """
+
     def __init__(self) -> None:
         pass
 
     def get_dataset(self, data_folder: str) -> pd.DataFrame:
+        """
+        Creates a clean dataset ready for visualization and modeling
+
+        Parameters:
+        ----------
+        data_folder: folder with raw data
+
+        return: clean dataframe
+        """
         traffic_data = os.path.join(data_folder, "trafikkdata.csv")
         traffic_df = self.clean_traffic_data(traffic_data)
         weather_df = self.clean_weather_data(data_folder)
-        combined = self.combine_data(traffic_df, weather_df)
-        feature_engineered = self.create_features(combined)
-        return feature_engineered
+        df = self.combine_data(traffic_df, weather_df)
+
+        fe = FeatureEngineering()
+        df = fe.create_time_based_features(df)
+        return df
 
     def clean_traffic_data(self, filepath: str) -> pd.DataFrame:
         """
@@ -24,7 +37,11 @@ class DataCleaning:
         Removes unnecessary columns and sets datetime index.
         Creates a column with "Total Trafikkmengde"
 
-        return: Dataframe
+        Parameters:
+        ----------
+        filepath: path to raw traffic data
+
+        return: clean traffic data
         """
 
         # Leser traffikkdata,
@@ -98,7 +115,11 @@ class DataCleaning:
         Combines all weather data into one dataframe.
         Cleans and resamples data into 1H intervals.
 
-        return: DataFrame
+        Parameters:
+        ----------
+        data_folder: folder with raw data
+
+        return: clean weather data
         """
 
         # Henter filsti til værdata
@@ -131,6 +152,10 @@ class DataCleaning:
         # Setter negative verdier til 0 i globalstråling
         df["Globalstraling"] = df["Globalstraling"].clip(lower=0)
 
+        # Setter verdier over 1000 til 1000. Gjelder bare et par målinger
+        # i januar 2016
+        df["Globalstraling"][df["Globalstraling"] > 1000] = 1000
+
         # Dropper kolonnen relativluftfuktighet
         # mesteparten av radene har manglende verdier
         # df["Relativ luftfuktighet"] = df["Relativ luftfuktighet"].replace("", np.nan)
@@ -138,19 +163,8 @@ class DataCleaning:
 
         # Resampler værdata til 1t intervaller
         df_resampled = df.resample("H").mean()
+        df_resampled["Solskinstid"] = df["Solskinstid"].resample("H").sum()
         return df_resampled
-
-    def create_features(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Creates new features from existing features
-
-        return: DataFrame
-        """
-        df["hour"] = df.index.hour
-        df["day"] = df.index.dayofweek
-        df["month"] = df.index.month
-        df["year"] = df.index.year
-        return df
 
     def combine_data(
         self, trafikk_df: pd.DataFrame, weather_df: pd.DataFrame
@@ -158,7 +172,12 @@ class DataCleaning:
         """
         Combines traffic and weather data
 
-        return: DataFrame
+        Parameters:
+        ----------
+        trafikk_df: clean traffic data
+        weather_df: clean weather data
+
+        return: combined data
         """
 
         df = weather_df.merge(trafikk_df, right_index=True, left_index=True)
