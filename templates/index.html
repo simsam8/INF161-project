@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sykkeltrafikk</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div>
+      <h1>Sykkeltrafikk prediksjon</h1>
+
+      <form action="{{url_for('predict')}}" method='post'>
+        <label for="Dato">Dato:</label>
+        <input type="date" name="Dato" required='required'/> <br>
+
+        <label for="Tid">Tidspunkt:</label>
+        <input type="time" name="Tid" required='required'/> <br>
+
+        <label for="Lufttemperatur">Temperatur:</label>
+        <input type="number" name="Lufttemperatur"/> <br>
+
+        <label for="Solskinstid">Solskinstid:</label>
+        <input type="number" name="Solskinstid" min="0" max="60"/> <br>
+
+        <label for="Globalstraling">Globalstråling:</label>
+        <input type="number" name="Globalstraling" min="0"/> <br>
+
+        <label for="Vindretning">Vindretning:</label>
+        <input type="number" name="Vindretning" min="0" max="360"/> <br>
+
+        <label for="Vindstyrke">Vindstyrke:</label>
+        <input type="number" name="Vindstyrke" min="0"/> <br>
+
+        <label for="Lufttrykk">Lufttrykk:</label>
+        <input type="number" name="Lufttrykk" min="0"/> <br>
+
+        <label for="Vindkast">Vindkast:</label>
+        <input type="number" name="Vindkast" min="0"/> <br>
+
+        <button type="submit" value="Submit">Predict</button>
+        <button type="reset" value="Reset">Reset</button>
+      </form>
+
+      <br>
+      {{pred_text}}
+    </div>
+
+  
+  </body>
+</html>
