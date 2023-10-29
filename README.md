@@ -17,8 +17,9 @@ python versjon brukt: 3.11
 
 1. Lag et python miljø og aktiver det
 2. Installer pakker med: pip install -r requirements.txt
-3. Kjør INF161project.py for modellutvalg og trene beste modellering
-4. Kjør app.py for nettsiden. Adressen er på localhost:8080
+3. raw_data mappen fra mittuib må ligge i root.
+4. Kjør INF161project.py for modellutvalg og trene beste modellering
+5. Kjør app.py for nettsiden. Adressen er på localhost:8080
 
 
 
