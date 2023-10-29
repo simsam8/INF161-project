@@ -2,35 +2,34 @@
 
 ## Oppsett
 
+python versjon brukt: 3.11
+
 1. Lag et python miljø og aktiver det
-2. Installer pakker med: pip install -r requirements.txt (eller manuelt med pakkene oppgitt på oppgavebeskrivelsen)
-3. ...
+2. Installer pakker med: pip install -r requirements.txt
+3. Kjør INF161project.py for modellutvalg og trene beste modellering
+4. Kjør app.py for nettsiden. Adressen er på localhost:8080
 
 
 
 ## Filer
 
-I mappen classes finner du alle python klasser for data prossesering, analyse og modellering:
+I mappen classes finner du alle python klasser for data prossesering, analyse, feature engineering og modellering:
 
-- [DataCleaning.py](classes/DataCleaning.py)
-- [DataExploration.py](classes/DataExploration.py)
-- [ModelEvaluation.py](classes/ModelEvaluation.py)
-
-
-I mappen notebooks finner du alle jupyter notebooks som ble brukt for testing av kode
-
-- [Del1.ipynb](notebooks/Del1.ipynb)
-- [Analyse.ipynb](notebooks/Analyse.ipynb)
-- ...
+- DataCleaning.py
+- DataExploration.py
+- ModelEvaluation.py
+- FeatureEngineering.py
 
 
-Filer for rapport og resultater:
+I root mappen finner du:
 
-- [DataExploration.ipynb](DataExploration.ipynb)
-- [ModelResults.ipynb](ModelResults.ipynb)
-- [rapport.md](rapport.md)
-
-
-Diverse filer:
-
-- [test.py](test.py) brukt for testing
+- app.py:                   Fil for å kjøre nettside
+- DataExploration.ipynb:    Jupyter notebook for dataanalyse
+- INF161project.py:         Fil for modelutvalg, trening og prediksjon
+- predictions.csv:          Prediksjon for 2023 data
+- program_log:              Resultat fra modelutvalg
+- rapport.md:               Markdown fil til å genere rapport
+- requirements:             Liste over pakker brukt i prosjektet
+- models/model.pkl:         Ferdigtrent modell
+- templates/index.html:     Html for nettside
+- images/:                  Bildemappe for rapport
