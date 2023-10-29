@@ -8,6 +8,7 @@ class DataExploration:
     """
     Class for data exploration
     """
+
     def __init__(self) -> None:
         pass
 
@@ -25,7 +26,7 @@ class DataExploration:
 
     def traffic_by_day(self, df: pd.DataFrame) -> None:
         """
-        Total traffic for each weekday
+        Average traffic for each weekday
 
         Parameters:
         ----------
@@ -43,7 +44,7 @@ class DataExploration:
 
     def hourly_traffick_by_day(self, df: pd.DataFrame) -> None:
         """
-        Total traffic for each hour of the day
+        Average traffic for each hour of the day
 
         Parameters:
         ----------
@@ -73,7 +74,7 @@ class DataExploration:
             y="Total Trafikkmengde",
             barmode="group",
             orientation="v",
-            histfunc="avg",
+            histfunc="sum",
             color="year",
         )
 
@@ -93,7 +94,7 @@ class DataExploration:
             y="Total Trafikkmengde",
             barmode="group",
             orientation="v",
-            histfunc="avg",
+            histfunc="sum",
         )
         fig.show()
 
@@ -127,4 +128,59 @@ class DataExploration:
             x="Vindstyrke",
         )
         fig.update_layout(autotypenumbers="convert types")
+        fig.show()
+
+    def hourly_predicted_traffic(self, prediction: pd.DataFrame) -> None:
+        """
+        Average hourly predicted traffic.
+
+        Parameters:
+        ----------
+        prediction: predction dataframe
+        """
+        fig = px.histogram(
+            prediction,
+            x="Tid",
+            y="Prediksjon",
+            barmode="group",
+            histfunc="avg",
+            orientation="v",
+        )
+        fig.show()
+
+    def monthly_predicted_traffic(self, prediction: pd.DataFrame) -> None:
+        """
+        Monthly sum of predicted traffic.
+
+        Parameters:
+        ----------
+        prediction: predction dataframe
+        """
+        fig = px.histogram(
+            prediction,
+            x="month",
+            y="Prediksjon",
+            barmode="group",
+            orientation="v",
+            histfunc="sum",
+        )
+
+        fig.show()
+
+    def daily_predicted_traffic(self, prediction: pd.DataFrame) -> None:
+        """
+        Average daily predicted traffic.
+
+        Parameters:
+        ----------
+        prediction: predction dataframe
+        """
+        fig = px.histogram(
+            prediction,
+            x="day",
+            y="Prediksjon",
+            barmode="group",
+            histfunc="avg",
+            orientation="v",
+        )
         fig.show()
