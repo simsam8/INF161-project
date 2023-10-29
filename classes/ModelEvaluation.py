@@ -6,7 +6,6 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
-from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 from sklearn.neural_network import MLPRegressor
@@ -39,12 +38,12 @@ class ModelEvaluation:
     ):
         """
         Split data for modelling into train and test.
-        Data from 2021 and onward is used as test set.
+        Data from the given year and onward is used as test set.
 
         Parameters:
         ----------
         model_data: dataframe to train models on
-        test_year_start: year to use as starting point for test set
+        test_year_start: year to use as starting point for test set (2021 is default)
         combined: bool (True: keep train and test as full dataframes, not X and y)
 
         return:
@@ -91,12 +90,12 @@ class ModelEvaluation:
         gscv.fit(X, y)
         end_time = time.time()
         best_model = gscv.best_estimator_
-        best_score = -gscv.best_score_
+        best_score = round(-gscv.best_score_, 2)
         best_params = gscv.best_params_
-        validation_time = end_time - start_time
+        validation_time = round(end_time - start_time, 2)
         print(f"Mean score of best estimator: {best_score}")
-        print(f"With parameters: {best_params}\n")
-        print(f"Validation time: {validation_time}")
+        print(f"With parameters: {best_params}")
+        print(f"Validation time: {validation_time}s\n")
         return best_model, best_score, validation_time
 
     def evaluate_best_model(self, X, y) -> tuple[Pipeline, float]:
@@ -113,16 +112,23 @@ class ModelEvaluation:
         """
         models = {
             "Dummy": self.dummy_regressor(X, y),
-            # "KNN": self.k_neighbors(X, y),
             "RandomForest": self.random_forest(X, y),
             "MLPR": self.mlp(X, y),
             "SVR": self.support_vector(X, y),
-            # "ElasticNet": self.elastic_net(X, y),
+            "ElasticNet": self.elastic_net(X, y),
         }
-        [
-            print(f"name: {name},\t\trmse: {val[1]},\t\tval_time: {val[2]}")
+
+        validation_log = [
+            f"name: {name},\tval_rmse: {val[1]},\tval_time: {val[2]}s\n"
             for name, val in models.items()
         ]
+
+        [print(line, end="") for line in validation_log]
+
+        with open("program_log.txt", "w") as f:
+            f.write("VALIDATION RESULTS\n\n")
+            f.writelines(validation_log)
+
         best_model_key = min(models, key=lambda x: models[x][1])
         model = models[best_model_key][0]
         val_score = models[best_model_key][1]
@@ -174,7 +180,7 @@ class ModelEvaluation:
             },
             {
                 "model__kernel": ["poly"],
-                "model__degree": [3, 4, 5],
+                "model__degree": [3, 4, 5, 6],
                 "model__C": [1, 10, 0.1, 0.01],
             },
         ]
@@ -184,28 +190,6 @@ class ModelEvaluation:
 
         print("Running svr")
 
-        return self.cross_validate(X, y, pipe, parameters)
-
-    def k_neighbors(self, X, y) -> tuple:
-        """
-        Create a pipeline and run cross validation with:
-        KNearest Neighbors Regressor
-
-        Parameters:
-        ----------
-        X: feature columns
-        y: target column
-
-        return: best model, best score, validation time
-        """
-        parameters = {
-            "model__n_neighbors": range(1, 102, 2),
-            "model__weights": ["uniform", "distance"],
-        }
-
-        model = KNeighborsRegressor()
-        pipe = self.create_pipe(model)
-        print("Running KNN Regressor")
         return self.cross_validate(X, y, pipe, parameters)
 
     def random_forest(self, X, y) -> tuple:
@@ -244,12 +228,19 @@ class ModelEvaluation:
         return: best model, best score, validation time
         """
         parameters = {
-            "model__hidden_layer_sizes": [(50,), (100,), (50, 50), (30, 30, 10)],
-            "model__alpha": [0.001, 0.01],
+            "model__hidden_layer_sizes": [
+                (50,),
+                (100,),
+                (50, 50),
+                (200,),
+                (300, 100),
+                (30, 30, 10),
+            ],
+            "model__alpha": [0.001, 0.01, 0.1],
             "model__activation": ["tanh", "relu"],
         }
         model = MLPRegressor(
-            random_state=self.random_state, shuffle=False, max_iter=2000
+            random_state=self.random_state, shuffle=False, max_iter=1000
         )
         pipe = self.create_pipe(model)
 
@@ -259,7 +250,7 @@ class ModelEvaluation:
     def elastic_net(self, X, y) -> tuple:
         """
         Create a pipeline and run cross validation with:
-        Multi Layer Perceptron Regressor
+        Elastic Net
 
         Parameters:
         ----------
@@ -290,7 +281,7 @@ class ModelEvaluation:
 
         return: best model, best score, validation time
         """
-        parameters = {"model__strategy": ["mean", "median"]}
+        parameters = {"model__strategy": ["mean"]}
 
         model = DummyRegressor()
         pipe = self.create_pipe(model)
