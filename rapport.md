@@ -75,7 +75,7 @@ Selve analysen er gjort i jupyter notebooken DataExploration.
 ## Statistisk beskrivelse
 
 Flere av kolonnene har manglende verdier. Der har jeg tenkt til å bruke
-KNN imputasjon for å håndtere disse.
+KNN imputasjon for å håndtere disse. Alle kolonner har fornuftige nedre og øvre grenser.
 
 ![Statistisk beskrivelse av features](images/feature_statistics.png)
 
@@ -96,7 +96,7 @@ avhenger mer av tidspunkt til målingen.
 ## Traffikkmengde på tid
 
 Det er nokså lik traffikmengde for alle årene, med unntak av 2015, som bare
-har målinger fra juli. 2019 og 2020 har mest traffikmengde, kan muligens 
+har målinger fra juli. 2019 og 2020 har mest traffikmengde, noe som muligens kan
 forklares av korona pandemien. Jeg velger å ikke bruke år som en feature 
 i modelleringen, fordi traffikmengden har liten variasjon fra år til år.
 
@@ -110,7 +110,7 @@ Trafikkmenden følger samme mønster for hvert år.
 
 Det er flest som sykler i ukedagene sammenlignet med helgen. Dette er muligens 
 fordi folk sykler til og fra jobb. Det stemmer overens med tidspunktet 
-det er mest trafikkmende i neste figur.
+det er mest trafikkmende i figur 6.
 
 ![Gjennomsnittlig traffikmengde per dag](images/daily_traffic.png)
 
@@ -145,7 +145,7 @@ Jeg har valgt ut fire modeller og en baseline.
 Baseline modellen bruker gjennomsnittlig traffikkmengde
 som prediksjon.
 
-Jeg forventer at RandomForest og neural netverk (MLPR) vil gjøre ganske bra generelt.
+Jeg forventer at RandomForest og neural netverk (MLPR) vil gjøre det bra generelt.
 MLPR vil nok bruke mye lengre tid på trening, og trenger å testes med flere parameter kombinasjoner
 for å få til et bra resultat.
 
@@ -190,7 +190,7 @@ Validerings resultater:[^1]
 | SVR           | 59.31     | 690.72s   |
 | ElasticNet    | 65.76     | 5.31s   | 
 
-Vi ser at alle mulige modeller gjør det bedre enn baselinen. Det er derimot bare 
+Vi ser at alle modellene gjør det bedre enn baselinen. Det er derimot bare 
 RandomForest og MLPR som har et betydelig bedre resultat.
 
 Resultatene stemte nesten med forventningene mine, men jeg ble litt overrasket av at 
@@ -247,7 +247,7 @@ Jeg kunne gjerne ha testet flere parameter kombinasjoner for å muligens endt op
 rmse.
 
 Jeg ville gjerne ha sett om det er noen spesielle tilfeller 
-modellen sliter med. Slik modellen er nå vet jeg ikke 100% om det er et spesielt tilfelle,
+modellen sliter med. Slik modellen er nå vet jeg ikke 100% om det er et spesielt tilfelle modellen sliter med,
 eller om det bare er en generell error i modellen.
 
 
