@@ -1,32 +1,13 @@
 import pandas as pd
-import numpy as np
 
 
 class FeatureEngineering:
     """
     Class for feature engineering
     """
+
     def __init__(self) -> None:
         pass
-
-    def encode_cyclical(
-        self, df: pd.DataFrame, col: str, max_val: int
-    ) -> pd.DataFrame:
-        """
-        Encodes a cyclical feature.
-
-        Parameters:
-        ----------
-        data: DataFrame
-        col: feature column
-        max_val: max value of cycle
-
-        return: modified DataFrame
-        """
-        df[col + "_sin"] = np.sin(2 * np.pi * df[col] / max_val)
-        df[col + "_cos"] = np.cos(2 * np.pi * df[col] / max_val)
-        df = df.drop(col, axis=1)
-        return df
 
     def remove_columns(self, columns: list[str], df: pd.DataFrame):
         """
