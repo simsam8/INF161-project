@@ -150,15 +150,11 @@ class DataCleaning:
         df = df.replace(9999.99, np.nan)
 
         # Setter negative verdier til 0 i globalstråling
-        df["Globalstraling"] = df["Globalstraling"].clip(lower=0)
-
-        # Setter verdier over 1000 til 1000. Gjelder bare et par målinger
-        # i januar 2016
-        df["Globalstraling"][df["Globalstraling"] > 1000] = 1000
+        # Setter verdier over 1000 til 1000. Gjelder bare et par målinger i januar 2016
+        df["Globalstraling"] = df["Globalstraling"].clip(lower=0, upper=1000)
 
         # Dropper kolonnen relativluftfuktighet
         # mesteparten av radene har manglende verdier
-        # df["Relativ luftfuktighet"] = df["Relativ luftfuktighet"].replace("", np.nan)
         df = df.drop(columns=["Relativ luftfuktighet"])
 
         # Resampler værdata til 1t intervaller
