@@ -1,0 +1,15 @@
+VALIDATION RESULTS
+
+name: Dummy,	val_rmse: 70.84,	val_time: 1.71s
+name: RandomForest,	val_rmse: 30.13,	val_time: 130.36s
+name: MLPR,	val_rmse: 32.48,	val_time: 3956.0s
+name: SVR,	val_rmse: 59.31,	val_time: 690.72s
+name: ElasticNet,	val_rmse: 62.76,	val_time: 5.31s
+
+FINAL MODEL
+
+Model: Pipeline(steps=[('imputer', KNNImputer()), ('scaler', StandardScaler()),
+                ('model',
+                 RandomForestRegressor(n_estimators=250, random_state=100))])
+Validation rmse: 30.13
+Test rmse: 25.12
