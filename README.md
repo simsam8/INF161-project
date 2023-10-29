@@ -1,8 +1,19 @@
 # INF161-project
 
-## Oppsett
-
 python versjon brukt: 3.11
+
+## Eksterne pakker
+
+- matplotlib
+- scikit-learn
+- pandas 
+- numpy
+- seaborn
+- plotly
+- flask
+- waitress
+
+## Oppsett
 
 1. Lag et python miljø og aktiver det
 2. Installer pakker med: pip install -r requirements.txt
